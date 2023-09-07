@@ -223,6 +223,9 @@ class HumanEvalPack(Task):
         elif self.prompt == "wizardcoder":
             # https://github.com/nlpxucan/WizardLM/blob/main/WizardCoder/src/humaneval_gen.py#L37
             prompt = f'Below is an instruction that describes a task. Write a response that appropriately completes the request.\n\n### Instruction:\n{inp}\n\n### Response:\n{prompt_base}'
+        elif self.prompt == "refact_instruct":
+            prompt = (f'<empty_output>USER {inp}\n'
+                      f'<empty_output>ASSISTANT {prompt_base}')
         else:
             raise NotImplementedError
 
