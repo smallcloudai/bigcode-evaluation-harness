@@ -146,29 +146,11 @@ class TokenizedDataset(IterableDataset):
             return f"{preprefix}{prefix}<|mask:0|>{suffix}<|mask:0|>"
         elif model_id in ["bigcode/santacoder"]:
             return f"<fim-prefix>{preprefix}{prefix}<fim-suffix>{suffix}<fim-middle>"
-        elif model_id in ["bigcode/starcoder", "bigcode/starcoderbase"]:
+        elif model_id in ["bigcode/starcoder", "bigcode/starcoderbase", "smallcloudai/Refact-1_6B-fim"]:
             return f"<fim_prefix>{preprefix}{prefix}<fim_suffix>{suffix}<fim_middle>"
         else:
             raise ValueError(f"Infilling not yet supported for: {model_id}")
 
-    def _make_instruction_prompt(self, instruction, context, prefix=""):
-        """Make a prompt for instruction-tuning. Delimit instruction and context with specific tokens if provided."""
-        if not self.instruction_tokens:
-            warnings.warn(
-                "Instruction-tuning tokens are not provided for an instruction-tuning task, we will leave them empty."
-            )
-            user_token, end_token, assistant_token = "", "", "\n"
-        else:
-            user_token, end_token, assistant_token = self.instruction_tokens
-            if not user_token or not assistant_token or not end_token:
-                warnings.warn(
-                    "Instruction-tuning tokens provided but one or more are empty. Ignore warning if this was intended"
-                )
-        prompt = (
-            prefix + user_token + instruction + end_token + assistant_token + context
-        )
-
-        return prompt
 
 
 def _parse_infill(code, tokenizer):
